@@ -8,7 +8,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     try {
-      fetch('http://127.0.0.1:8000')
+      fetch('http://localhost:8000')
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -27,7 +27,7 @@ export default function Dashboard() {
     <Container component="main" maxWidth="lg">
       <Grid container spacing={3}>
         {articles.map(article => (
-          <Grid item xs={12} sm={6} md={4} key={article.id}>
+          <Grid item xs={12} key={article.id}> {/* Utilisation d'une seule colonne */}
             <Paper elevation={3} style={{ padding: 16 }}>
               <div style={{ marginTop: 8 }}>
                 {article.user.name && <Chip label={article.user.name} variant="outlined" size="small" style={{ marginRight: 4 }} />}

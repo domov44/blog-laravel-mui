@@ -77,17 +77,17 @@ class ArticleController extends Controller
     {
         $article = Article::find($id);
         if (!$article) {
-            return redirect()->route('profile.articles')->with('error', 'Article non trouvé.');
+            return response()->json(['error' => 'Article non trouvé.'], 404);
         }
 
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('profile.articles')->with('error', 'Vous n\'êtes pas autorisé à supprimer cet article.');
-        }
+        // if ($article->user_id !== Auth::id()) {
+        //     return response()->json(['error' => 'Vous n\'êtes pas autorisé à supprimer cet article.'], 403);
+        // }
 
         $article->delete();
-        return redirect()->route('profile.articles')->with('success', 'Article supprimé avec succès.');
+        return response()->json(['success' => 'Article supprimé avec succès.'], 200);
     }
-    
+
     public function show($slug)
     {
         $article = Article::where('slug', $slug)->with('user', 'category')->first();
