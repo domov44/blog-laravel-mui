@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
@@ -16,61 +17,55 @@ class ArticleController extends Controller
         return response()->json($articles);
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('articles.create', compact('categories'));
-    }
-
     public function store(Request $request)
     {
-
         $request->validate([
             'title' => 'required',
             'content' => 'required',
             'category_id' => 'required',
         ]);
 
-        $userId = Auth::id();
+        $userId = 3;
+
+        $slug = Str::slug($request->input('title'));
+        $originalSlug = $slug;
+        $suffix = 2;
+
+        while (Article::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $suffix;
+            $suffix++;
+        }
 
         Article::create([
             'title' => $request->input('title'),
+            'slug' => $slug,
             'content' => $request->input('content'),
             'user_id' => $userId,
             'category_id' => $request->input('category_id'),
         ]);
 
-        return redirect()->route('profile.articles')->with('success', 'Article créé avec succès.');
+        return response()->json(['message' => 'Article créé avec succès.']);
     }
 
-    public function edit($id)
-    {
-        $article = Article::find($id);
-        return view('articles.edit', compact('article'));
-    }
-
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         $request->validate([
             'title' => 'required',
             'content' => 'required',
         ]);
 
-        $article = Article::find($id);
+        $article = Article::where('slug', $slug)->first();
         if (!$article) {
-            return redirect()->route('articles.index')->with('error', 'Article non trouvé.');
-        }
-
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('articles.index')->with('error', 'Vous n\'êtes pas autorisé à modifier cet article.');
+            return response()->json(['error' => 'Article not found.'], 404);
         }
 
         $article->update([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
+            'category_id' => $request->input('category_id'),
         ]);
 
-        return redirect()->route('profile.articles')->with('success', 'Article mis à jour avec succès.');
+        return response()->json(['message' => 'Article updated successfully.']);
     }
 
     public function destroy($id)
