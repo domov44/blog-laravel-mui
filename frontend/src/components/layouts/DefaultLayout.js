@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import CreateIcon from '@mui/icons-material/Create';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
@@ -135,14 +136,22 @@ export default function DefaultLayout({ children }) {
         </DrawerHeader>
         <Divider />
         <List>
-            <ListItem disablePadding>
-              <ListItemButton href="/">
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText primary="Accueil" />
-              </ListItemButton>
-            </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton href="/">
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText primary="Accueil" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton href="/mes-articles">
+              <ListItemIcon>
+                <CreateIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mes articles" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>

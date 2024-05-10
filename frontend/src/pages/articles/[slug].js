@@ -15,7 +15,7 @@ const styles = {
 
 export default function ArticlePage({ article, error }) {
     if (error) {
-        return <div>Une erreur s'est produite : {error}</div>;
+        return <div>Une erreur s&apos;est produite : {error}</div>;
     }
 
     if (!article) {

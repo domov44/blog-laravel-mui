@@ -59,7 +59,7 @@ export default function Dashboard() {
     };
 
     const handleDeleteSelected = async () => {
-        if (await confirm({ title: "Voulez-vous vraiment supprimer ces articles ?", content: "Ces articles seront supprimés et personne ne pourra y accéder", variant: "danger" })) {
+        if (await confirm({ title: `Voulez-vous vraiment supprimer ces ${selected.length} articles ?`, content: `Ces ${selected.length} articles seront supprimés et personne ne pourra y accéder`, variant: "danger" })) {
             try {
                 await fetch('http://localhost:8000/articles', {
                     method: 'DELETE',
@@ -70,7 +70,7 @@ export default function Dashboard() {
                 });
 
                 console.log("Articles avec les ID sélectionnés supprimés :", selected);
-                notifySuccess("Articles sélectionnés supprimés");
+                notifySuccess(`${selected.length} articles supprimés`);
                 setSelected([]);
                 setSelectAll(false);
             } catch (error) {
@@ -114,7 +114,7 @@ export default function Dashboard() {
                     onClick={handleDeleteSelected}
                 >
                     <DeleteIcon />
-                    Supprimer
+                    Supprimer ({selected.length})
                 </Button>
             </div>
             <TableContainer component={Paper}>
@@ -153,6 +153,7 @@ export default function Dashboard() {
                                 <TableCell>{article.title}</TableCell>
                                 <TableCell>
                                     <CustomButton to={`articles/${article.slug}`}>Lire</CustomButton>
+                                    <CustomButton to={`modifier-articles/${article.slug}`}>Modifier</CustomButton>
                                     <IconButton color="error" onClick={() => handleDelete(article.id)}>
                                         <DeleteIcon />
                                     </IconButton>
