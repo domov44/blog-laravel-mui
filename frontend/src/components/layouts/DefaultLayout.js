@@ -16,17 +16,26 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import Router from 'next/router';
-import Logout from '@/utils/Logout';
 import CustomButton from '../CustomButton';
+import {
+  showToast,
+  ToastContainer,
+  notifySuccess,
+  notifyError,
+  notifyInfo,
+  notifyWarning,
+  notifyDefault,
+} from '../../components/ui/Toastify';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -75,6 +84,24 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const handleProfileClick = () => {
 
+};
+
+const handleLogout = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/logout', {
+      method: 'POST'
+    });
+    if (response.ok) {
+      notifySuccess("Déconnexion réussie");
+      Router.push('/');
+    } else {
+      notifyError("Erreur lors de la déconnexion");
+      console.error('Logout failed:', response);
+    }
+  } catch (error) {
+    notifyError("Erreur lors de la déconnexion");
+    console.error('Logout error:', error);
+  }
 };
 
 export default function DefaultLayout({ children }) {
@@ -135,11 +162,11 @@ export default function DefaultLayout({ children }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{ padding: '10px' }}>
           <ListItem disablePadding>
             <ListItemButton href="/">
               <ListItemIcon>
-                <MailIcon />
+                <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Accueil" />
             </ListItemButton>
@@ -152,6 +179,25 @@ export default function DefaultLayout({ children }) {
               <ListItemText primary="Mes articles" />
             </ListItemButton>
           </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton href="/profil">
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mon profil" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List sx={{ padding: '10px' }}>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Déconnexion" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>
@@ -160,3 +206,4 @@ export default function DefaultLayout({ children }) {
     </Box>
   );
 }
+

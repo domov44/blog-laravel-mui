@@ -128,9 +128,9 @@ export default function Dashboard() {
                                     onChange={handleSelectAll}
                                 />
                             </TableCell>
+                            <TableCell>Title</TableCell>
                             <TableCell>Author</TableCell>
                             <TableCell>Category</TableCell>
-                            <TableCell>Title</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -144,13 +144,13 @@ export default function Dashboard() {
                                         onChange={(event) => handleSelectOne(event, article.id)}
                                     />
                                 </TableCell>
+                                <TableCell>{article.title}</TableCell>
                                 <TableCell>
                                     {article.user.name && <Chip label={article.user.name} variant="outlined" size="small" />}
                                 </TableCell>
                                 <TableCell>
                                     {article.category.label && <Chip label={article.category.label} variant="outlined" size="small" />}
                                 </TableCell>
-                                <TableCell>{article.title}</TableCell>
                                 <TableCell>
                                     <CustomButton to={`articles/${article.slug}`}>Lire</CustomButton>
                                     <CustomButton to={`modifier-articles/${article.slug}`}>Modifier</CustomButton>
